@@ -171,15 +171,15 @@ public struct InfiniteImageScroller<Label>: View where Label: View {
         let interval: Double = 1 / 60
         let animationDuration: Double = interval * 2
         timer = Timer.scheduledTimer(withTimeInterval: interval, repeats: true) { _ in
-            withAnimation(.linear(duration: animationDuration)) {
-                for i in 0..<offsets.count {
+            for i in 0..<offsets.count {
+                withAnimation(.linear(duration: animationDuration)) {
                     offsets[i] += direction.offsetIncrement * speed
+                }
 
-                    if direction == .left && offsets[i] <= leftScrollResetOffset {
-                        offsets[i] = lastOffset
-                    } else if direction == .right && offsets[i] >= maxWidth {
-                        offsets[i] = rightScrollResetOffset
-                    }
+                if direction == .left && offsets[i] <= leftScrollResetOffset {
+                    offsets[i] = lastOffset
+                } else if direction == .right && offsets[i] >= maxWidth {
+                    offsets[i] = rightScrollResetOffset
                 }
             }
         }
