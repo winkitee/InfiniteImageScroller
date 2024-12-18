@@ -65,11 +65,11 @@ public struct InfiniteImageScroller<Label>: View where Label: View {
     /// Array of offsets for each label.
     @State private var offsets: [CGFloat] = []
 
-    /// Timer for controlling the scrolling animation.
-    @State private var timer: Timer?
-
     /// ViewBuilder closure to create a label for each image.
     @ViewBuilder private var label: (Int, Image) -> Label
+    
+    /// Manages the CADisplayLink for periodic updates to synchronize animations.
+    private let displayLinkManager = CADisplayLinkManager()
 
     /// Initializer for InfiniteImageScroller.
     /// - Parameters:
@@ -168,13 +168,9 @@ public struct InfiniteImageScroller<Label>: View where Label: View {
         let leftScrollResetOffset = (itemWidth + itemSpacing) * -1
         let rightScrollResetOffset = lastOffset * -1 + (maxWidth - itemWidth) - itemSpacing
 
-        let interval: Double = 1 / 60
-        let animationDuration: Double = interval * 2
-        timer = Timer.scheduledTimer(withTimeInterval: interval, repeats: true) { _ in
+        displayLinkManager.start { deltaTime in
             for i in 0..<offsets.count {
-                withAnimation(.linear(duration: animationDuration)) {
-                    offsets[i] += direction.offsetIncrement * speed
-                }
+                offsets[i] += direction.offsetIncrement * speed
 
                 if direction == .left && offsets[i] <= leftScrollResetOffset {
                     offsets[i] = lastOffset
@@ -183,12 +179,10 @@ public struct InfiniteImageScroller<Label>: View where Label: View {
                 }
             }
         }
-        RunLoop.current.add(timer!, forMode: .common)
     }
 
     /// Stops the scrolling animation.
     private func stopScrolling() {
-        timer?.invalidate()
-        timer = nil
+        displayLinkManager.stop()
     }
 }
