@@ -35,12 +35,17 @@ public struct ImageScrollerItem: Sendable {
     public enum Size: Sendable {
         /// A single item with the specified fixed size.
         case fixed(CGFloat)
+        
+        /// A fixed size that allows specifying individual width and height.
+        case fixedSize(CGSize)
 
         /// Returns the width of the item based on the case.
         var width: CGFloat {
             switch self {
             case .fixed(let width):
                 return width
+            case .fixedSize(let size):
+                return size.width
             }
         }
 
@@ -49,6 +54,8 @@ public struct ImageScrollerItem: Sendable {
             switch self {
             case .fixed(let width):
                 return width
+            case .fixedSize(let size):
+                return size.height
             }
         }
     }

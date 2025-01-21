@@ -10,7 +10,7 @@ To install `InfiniteImageScroller` using Swift Package Manager, add the followin
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/winkitee/InfiniteImageScroller.git", from: "0.0.4")
+    .package(url: "https://github.com/winkitee/InfiniteImageScroller.git", from: "0.1.0")
 ]
 ```
 
